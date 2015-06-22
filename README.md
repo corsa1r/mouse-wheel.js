@@ -1,7 +1,7 @@
 # mouse-wheel.js
 This is a javascript class which handles native mouse wheel events and fires an custom output event.
 
-#how to use
+#how to use by default
 
 ```js
 //create instance of the class
@@ -12,6 +12,33 @@ var mw = new MouseWheel(myElement);
 mw.onRoll(function($event) {
   //Do something with $event
 });
+```
+
+# using requireJS
+```js
+//main.js
+define(['./build/MouseWheel', function(MouseWheel) {
+  var myElement = document.getElementById('myElement');
+  var mw = new MouseWheel(myElement);
+  
+  //listen for the event
+  mw.onRoll(function($event) {
+    //Do something with $event
+  });
+}];
+```
+
+# using browserify
+```js
+  var MouseWheel = require('./build/MouseWheel');
+  
+  var myElement = document.getElementById('myElement');
+  var mw = new MouseWheel(myElement);
+  
+  //listen for the event
+  mw.onRoll(function($event) {
+    //Do something with $event
+  });
 ```
 
 # Explore the output event
