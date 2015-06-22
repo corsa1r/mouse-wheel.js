@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="App">
+	<head>
+		<title>Mouse Wheel AngularJS directive demo</title>
+		<script src="../../node_modules/angular/angular.min.js"></script>
+		<script src="../../build/MouseWheel.js"></script>
+		<script src="./demo.js"></script>
+		<style>
+			.row {
+				width: 100px;
+				border: 1px solid black;
+				padding: 0px;
+				margin: 10px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body ng-controller="MainController">
+		<div class="row" on-roll="onRoll" ng-repeat="fruit in fruits">
+			{{fruit}}
+		</div>
+	</body>
+</html>
