@@ -1,0 +1,19 @@
+{
+  "name": "MouseWheel",
+  "version": "1.0.0",
+  "description": "Mouse event handler class for JS",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "JavaScript",
+    "Mouse"
+  ],
+  "author": "CORSAIR",
+  "license": "MIT",
+  "dependencies": {
+    "browserify": "^10.2.4",
+    "uglify": "^0.1.5"
+  }
+}
