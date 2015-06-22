@@ -13,3 +13,13 @@ mw.onRoll(function($event) {
   //Do something with $event
 });
 ```
+
+# Explore the output event
+```js
+var OutputWheelEvent = {
+  direction : String,// This is the scroll direction ['up', 'down']
+  time      : Number,// Current timestamp of the event creation
+  isNew     : Boolean,//This is true when the event is fired for the first time or scroll direction is changed
+  delta     : Number// This is delta time in miliseconds between current and last output event
+};
+```
