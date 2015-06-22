@@ -52,6 +52,6 @@ var OutputWheelEvent = {
 ```
 
 # TODO List
-* 1) Directive to AngularJS
-* 2) jQuery plugin
-* 3) Bootstrap module
+* Directive to AngularJS
+* jQuery plugin
+* Bootstrap module
