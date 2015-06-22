@@ -3,6 +3,19 @@ This is a javascript class which handles native mouse wheel events and fires an 
 
 #how to use by default
 
+index.html
+```html
+<html>
+  <head>
+    <title>Mouse Wheel event handler</title>
+    <script src="./build/MouseWheel.min.js"></script>
+  </head>
+  <body>
+    <div id="myElement"></div>
+  </body>
+</html>
+```
+
 ```js
 //create instance of the class
 var myElement = document.getElementById('myElement');
