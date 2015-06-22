@@ -50,3 +50,8 @@ var OutputWheelEvent = {
   delta     : Number// This is delta time in miliseconds between current and last output event
 };
 ```
+
+# TODO List
+1) Directive to AngularJS
+2) jQuery plugin
+3) Bootstrap module
