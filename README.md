@@ -22,8 +22,14 @@ var myElement = document.getElementById('myElement');
 var mw = new MouseWheel(myElement);
 
 //listen for the event
-mw.onRoll(function($event) {
-  //Do something with $event
+mw.on('roll', function($event) {
+  //Do something with $event for both scroll directions
+});
+mw.on('roll.up', function($event) {
+  //Do something with $event for up scroll direction only
+});
+mw.on('roll.down', function($event) {
+  //Do something with $event for down scroll direction only
 });
 ```
 
@@ -31,7 +37,13 @@ mw.onRoll(function($event) {
 index.html
 ```html
 <div mw-roll="onScroll" ng-repeat="item in items">
-  {{item}}
+  {{item}} scroll
+</div>
+<div mw-roll="onScroll" mw-direction="roll.up" ng-repeat="item in items">
+  {{item}} scroll up
+</div>
+<div mw-roll="onScroll" mw-direction="roll.down" ng-repeat="item in items">
+  {{item}} scroll down
 </div>
 ```
 main.js
@@ -53,10 +65,7 @@ define(['./build/MouseWheel', function(MouseWheel) {
   var myElement = document.getElementById('myElement');
   var mw = new MouseWheel(myElement);
   
-  //listen for the event
-  mw.onRoll(function($event) {
-    //Do something with $event
-  });
+  //listen for the event as native example
 }];
 ```
 
@@ -67,10 +76,7 @@ define(['./build/MouseWheel', function(MouseWheel) {
   var myElement = document.getElementById('myElement');
   var mw = new MouseWheel(myElement);
   
-  //listen for the event
-  mw.onRoll(function($event) {
-    //Do something with $event
-  });
+  //listen for the event as native example
 ```
 
 # Explore the output event
@@ -82,7 +88,3 @@ var OutputWheelEvent = {
   delta     : Number// This is delta time in miliseconds between current and last output event
 };
 ```
-
-# TODO List
-* jQuery plugin
-* Bootstrap module

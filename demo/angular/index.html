@@ -30,8 +30,8 @@
 			<div id="myElement"></div>
 		</div>
 		<div class="to-left">
-			<div class="row" mw-roll="onRoll" ng-repeat="fruit in fruits">
-				{{fruit}}
+			<div class="row" mw-roll="onRoll" mw-direction="{{dirs[$index]}}" ng-repeat="fruit in fruits" style="padding: 20px">
+				{{fruit}} - {{dirs[$index]}} direction allowed
 			</div>
 		</div>
 	</body>

@@ -27,6 +27,9 @@
 		0 : OutputWheelEvent.DIRECTION_DOWN
 	};
 	OutputWheelEvent.CLEAR_TIME = 300;//this is delta time gap
+	OutputWheelEvent.EVENT_UP	= 'roll.up';
+	OutputWheelEvent.EVENT_DOWN	= 'roll.down';
+	OutputWheelEvent.EVENT_NAME	= 'roll';
 	
     module.exports = OutputWheelEvent;
 })(window, document, void 0);

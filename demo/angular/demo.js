@@ -5,12 +5,13 @@ var app = angular.module('App', ['mouseWheel'])//define our angular application 
 		var myElement = document.getElementById('myElement');
 		var mwHandler = new $mouseWheel(myElement);
 		
-		mwHandler.onRoll(function ($event) {
+		mwHandler.on('roll', function ($event) {
 			$scope.onRoll($event, [myElement]);
 		});
 		
 		//List of fruits for repeat
-		$scope.fruits = ['Apple', 'Banana', 'Melon', 'Orange', 'Lemon'];
+		$scope.fruits 	= ['Apple', 'Banana', 'Melon', 'Orange', 'Lemon'];
+		$scope.dirs 	= ['roll.up', 'roll.up', 'roll', 'roll.down', 'roll.down'];
 		
 		/**
 		 * This is event listener for MouseWheel directive

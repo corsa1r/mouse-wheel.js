@@ -3,7 +3,8 @@
 	/**
 	 * Load dependencies [OutputWheelEvent]
 	 */
-	 var OutputWheelEvent = require('./OutputWheelEvent');
+	 var OutputWheelEvent 	= require('./OutputWheelEvent');
+	 var Events = require('events');
 	
 	/**
 	 * This class attach mouse wheel events over targetElement which is passed as parameter to the constructor
@@ -12,12 +13,12 @@
 	 * @returns {undefined}
 	 */
 	var MouseWheelHandler = function (targetElement) {
-		this.$$target = targetElement;
-		this.$$callback = null;
+		this.$$target    	= targetElement;
 		
-		this.lastTime = null;
-		this.lastDirection = 0;
+		this.lastTime    	= null;
+		this.lastDirection	= 0;
 		this.$$attachEvents();
+		this.$$eventEmitter = new Events.EventEmitter();
 	};
 	
 	/**
@@ -34,9 +35,7 @@
 	MouseWheelHandler.prototype.destroy = function () {
 		if(this.$$target) {
 			this.$$target.removeEventListener('mousewheel', this.$$handler.bind(this));
-			this.$$callback = null;
-			this.lastTime = null;
-			this.lastDirection = 0;
+			this.$$eventEmitter.removeAllListeners();
 		}
 		
 		return u;
@@ -60,28 +59,37 @@
 		var output = new OutputWheelEvent(deltaDirection, deltaTime, isNew);
 		this.lastTime = now;
 		this.lastDirection = deltaDirection;
-		this.$$fire(output);
+		return this.$$fire(output);
 	};
 	
 	/**
 	 * @private
 	 */
 	MouseWheelHandler.prototype.$$fire = function (output) {
-		if(isFunction(this.$$callback)) {
-			this.$$callback(output);
+		switch(output.direction) {
+			case OutputWheelEvent.DIRECTION_UP :
+				this.$$eventEmitter.emit(OutputWheelEvent.EVENT_UP, output);
+				break;
+			case OutputWheelEvent.DIRECTION_DOWN :
+				this.$$eventEmitter.emit(OutputWheelEvent.EVENT_DOWN, output);
+				break;
 		}
+		
+		this.$$eventEmitter.emit(OutputWheelEvent.EVENT_NAME, output);
+		
+		return this;
 	};
 	
-	/**
-	 * This method allows you to attach one listener for mouse wheel events
-	 * return {Object} self instance
-	 */
-	MouseWheelHandler.prototype.onRoll = function (callback) {
+	MouseWheelHandler.prototype.on = function (name, callback) {
 		if(isFunction(callback)) {
-			this.$$callback = callback;
+			this.$$eventEmitter.on(name, callback);
 		}
 		
 		return this;
+	};
+	
+	MouseWheelHandler.prototype.off = function (name, callback) {
+		this.$$eventEmitter.removeListener(name, callback);
 	};
 	
 	/**
