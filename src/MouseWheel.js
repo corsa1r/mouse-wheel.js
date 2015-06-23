@@ -28,6 +28,7 @@
 	
 	if(typeof angular === TYPE_OBJECT) {
 		angular.module('mouseWheel', [])
-			.directive('onRoll', require('./MouseWheelDirective'));
+			.factory('$mouseWheel', require('./MouseWheelFactory'))
+			.directive('mwRoll', require('./MouseWheelDirective'));
 	}
 })(window, document, void 0);

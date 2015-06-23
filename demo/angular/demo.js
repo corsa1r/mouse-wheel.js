@@ -1,6 +1,13 @@
 /* global angular */
 var app = angular.module('App', ['mouseWheel'])//define our angular application which depends on mouseWheel module.
-	.controller('MainController', ['$scope', function($scope) {
+	.controller('MainController', ['$scope', '$mouseWheel', function($scope, $mouseWheel) {
+		
+		var myElement = document.getElementById('myElement');
+		var mwHandler = new $mouseWheel(myElement);
+		
+		mwHandler.onRoll(function ($event) {
+			$scope.onRoll($event, [myElement]);
+		});
 		
 		//List of fruits for repeat
 		$scope.fruits = ['Apple', 'Banana', 'Melon', 'Orange', 'Lemon'];
@@ -14,7 +21,6 @@ var app = angular.module('App', ['mouseWheel'])//define our angular application 
 		$scope.onRoll = function ($event, $target) {
 			$scope.zoomInElement($target, $event.direction === 'down', 10 / $event.delta);
 		};
-		
 		
 		/**
 		 * This method resizes the target element

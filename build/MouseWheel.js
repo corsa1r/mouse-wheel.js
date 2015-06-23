@@ -29,35 +29,46 @@
 	
 	if(typeof angular === TYPE_OBJECT) {
 		angular.module('mouseWheel', [])
-			.directive('onRoll', require('./MouseWheelDirective'));
+			.factory('$mouseWheel', require('./MouseWheelFactory'))
+			.directive('mwRoll', require('./MouseWheelDirective'));
 	}
 })(window, document, void 0);
-},{"./MouseWheelDirective":2,"./MouseWheelHandler":3}],2:[function(require,module,exports){
+},{"./MouseWheelDirective":2,"./MouseWheelFactory":3,"./MouseWheelHandler":4}],2:[function(require,module,exports){
 /* global angular */
-var MouseWheel = require('./MouseWheel');
-
-module.exports = ['$parse', function ($parse) {
+module.exports = ['$parse', '$mouseWheel', function ($parse, $mouseWheel) {
 	return {
 		restrict : 'A',
 		link: function (scope, element, attributes) {
 			var target = element[0];
-			var mw = new MouseWheel(target);
-			var callbackName = attributes.onRoll;
+			var mwHandler = new $mouseWheel(target);
+			var callbackName = attributes.mwRoll;
 			var callback = scope[callbackName];
 			
-			if(!angular.isUndefined(callback) && angular.isFunction(callback)) {//attach event only if the callback name exists and is a function
-				mw.onRoll(function ($event) {
+			if(!angular.isUndefined(callback) && angular.isFunction(callback)) {//attach event listener only if the callback name exists and is a function
+				mwHandler.onRoll(function ($event) {
 					callback.apply(callback, [$event, element]);
-				});	
+				});
 			}
 			
-			scope.$on('$destroy', function (params) {
-				mw.$$callbacks = [];//cleaning up callbacks
+			scope.$on('$destroy', function () {
+				mwHandler.destory();//clean up callback reference before garbage collector
 			});
 		}
 	};
 }];
-},{"./MouseWheel":1}],3:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
+/**
+ * Load dependency
+ */
+var MouseWheel = require('./MouseWheelHandler');
+
+/**
+ * define $mouseWheel factory
+ */
+module.exports = [function () {
+	return MouseWheel;
+}];
+},{"./MouseWheelHandler":4}],4:[function(require,module,exports){
 ;(function (win, dom, u) {
 	
 	/**
@@ -73,7 +84,7 @@ module.exports = ['$parse', function ($parse) {
 	 */
 	var MouseWheelHandler = function (targetElement) {
 		this.$$target = targetElement;
-		this.$$callbacks = [];
+		this.$$callback = null;
 		
 		this.lastTime = null;
 		this.lastDirection = 0;
@@ -86,6 +97,21 @@ module.exports = ['$parse', function ($parse) {
 	MouseWheelHandler.prototype.$$attachEvents = function () {
 		this.$$target.addEventListener("mousewheel", this.$$handler.bind(this), false);
 	};
+	
+	/**
+	 * This method unbind event for mousewheel over $$target element
+	 * @return undefined
+	 */
+	MouseWheelHandler.prototype.destroy = function () {
+		if(this.$$target) {
+			this.$$target.removeEventListener('mousewheel', this.$$handler.bind(this));
+			this.$$callback = null;
+			this.lastTime = null;
+			this.lastDirection = 0;
+		}
+		
+		return u;
+	}
 	
 	/**
 	 * @private
@@ -105,18 +131,27 @@ module.exports = ['$parse', function ($parse) {
 		var output = new OutputWheelEvent(deltaDirection, deltaTime, isNew);
 		this.lastTime = now;
 		this.lastDirection = deltaDirection;
-		
-		for(var i in this.$$callbacks) {
-			this.$$callbacks[i](output);
+		this.$$fire(output);
+	};
+	
+	/**
+	 * @private
+	 */
+	MouseWheelHandler.prototype.$$fire = function (output) {
+		if(isFunction(this.$$callback)) {
+			this.$$callback(output);
 		}
 	};
 	
 	/**
-	 * This method allows you to attach listeners for mouse wheel events
+	 * This method allows you to attach one listener for mouse wheel events
 	 * return {Object} self instance
 	 */
 	MouseWheelHandler.prototype.onRoll = function (callback) {
-		this.$$callbacks.push(callback);
+		if(isFunction(callback)) {
+			this.$$callback = callback;
+		}
+		
 		return this;
 	};
 	
@@ -127,12 +162,21 @@ module.exports = ['$parse', function ($parse) {
 	if(!Date.now) {
 		Date.now = function now() {
 			return (new Date()).getTime();
-		}
+		};
+	}
+	
+	/**
+	 * This function checks if the given parameter is a callable function
+	 * @param {Function} what
+	 * @returns {Boolean} true if it's a function false otherwise
+	 */
+	function isFunction(what) {
+		return Boolean(typeof what === 'function' || what instanceof Function);
 	}
 	
 	module.exports = MouseWheelHandler;
 })(window, document, void 0);
-},{"./OutputWheelEvent":4}],4:[function(require,module,exports){
+},{"./OutputWheelEvent":5}],5:[function(require,module,exports){
 /* global define */
 ;(function (win, dom, u) {	
 	/**

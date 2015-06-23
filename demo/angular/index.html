@@ -13,11 +13,26 @@
 				margin: 10px;
 				text-align: center;
 			}
+			
+			#myElement {
+				width: 200px;
+				height: 200px;
+				border: 1px solid black;
+			}
+			
+			.to-left {
+				float: left;
+			}
 		</style>
 	</head>
 	<body ng-controller="MainController">
-		<div class="row" on-roll="onRoll" ng-repeat="fruit in fruits">
-			{{fruit}}
+		<div class="to-left">
+			<div id="myElement"></div>
+		</div>
+		<div class="to-left">
+			<div class="row" mw-roll="onRoll" ng-repeat="fruit in fruits">
+				{{fruit}}
+			</div>
 		</div>
 	</body>
 </html>

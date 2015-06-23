@@ -27,6 +27,25 @@ mw.onRoll(function($event) {
 });
 ```
 
+#using AngularJS
+index.html
+```html
+<div mw-roll="onScroll" ng-repeat="item in items">
+  {{item}}
+</div>
+```
+main.js
+```js
+  /**
+   * This method will be called automatically when you scroll over the $target element
+   * @param {Object} $event - this is OutputMouseWheel event
+   * @param {Object} $target - this is target element wraped by angular.element()
+   * */
+  $scope.onScroll = function($event, $target) {
+    //Do something with $target and $event data
+  };
+```
+
 # using requireJS
 ```js
 //main.js

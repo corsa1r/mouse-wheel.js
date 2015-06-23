@@ -13,7 +13,7 @@
 	 */
 	var MouseWheelHandler = function (targetElement) {
 		this.$$target = targetElement;
-		this.$$callbacks = [];
+		this.$$callback = null;
 		
 		this.lastTime = null;
 		this.lastDirection = 0;
@@ -26,6 +26,21 @@
 	MouseWheelHandler.prototype.$$attachEvents = function () {
 		this.$$target.addEventListener("mousewheel", this.$$handler.bind(this), false);
 	};
+	
+	/**
+	 * This method unbind event for mousewheel over $$target element
+	 * @return undefined
+	 */
+	MouseWheelHandler.prototype.destroy = function () {
+		if(this.$$target) {
+			this.$$target.removeEventListener('mousewheel', this.$$handler.bind(this));
+			this.$$callback = null;
+			this.lastTime = null;
+			this.lastDirection = 0;
+		}
+		
+		return u;
+	}
 	
 	/**
 	 * @private
@@ -45,18 +60,27 @@
 		var output = new OutputWheelEvent(deltaDirection, deltaTime, isNew);
 		this.lastTime = now;
 		this.lastDirection = deltaDirection;
-		
-		for(var i in this.$$callbacks) {
-			this.$$callbacks[i](output);
+		this.$$fire(output);
+	};
+	
+	/**
+	 * @private
+	 */
+	MouseWheelHandler.prototype.$$fire = function (output) {
+		if(isFunction(this.$$callback)) {
+			this.$$callback(output);
 		}
 	};
 	
 	/**
-	 * This method allows you to attach listeners for mouse wheel events
+	 * This method allows you to attach one listener for mouse wheel events
 	 * return {Object} self instance
 	 */
 	MouseWheelHandler.prototype.onRoll = function (callback) {
-		this.$$callbacks.push(callback);
+		if(isFunction(callback)) {
+			this.$$callback = callback;
+		}
+		
 		return this;
 	};
 	
@@ -67,7 +91,16 @@
 	if(!Date.now) {
 		Date.now = function now() {
 			return (new Date()).getTime();
-		}
+		};
+	}
+	
+	/**
+	 * This function checks if the given parameter is a callable function
+	 * @param {Function} what
+	 * @returns {Boolean} true if it's a function false otherwise
+	 */
+	function isFunction(what) {
+		return Boolean(typeof what === 'function' || what instanceof Function);
 	}
 	
 	module.exports = MouseWheelHandler;
