@@ -88,3 +88,8 @@ var OutputWheelEvent = {
   delta     : Number// This is delta time in miliseconds between current and last output event
 };
 ```
+
+# MouseWheel events
+* roll      - triggered when scrolling
+* roll.up   - triggered when scrolling up
+* roll.down - triggered when scrolling down
